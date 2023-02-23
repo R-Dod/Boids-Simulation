@@ -17,7 +17,7 @@ public class Boid : MonoBehaviour
 
     public float protected_range = 2.5f;
 
-    public float factor = 5f;
+    public float turnFactor = 0.25f;
 
     public float speed = 5f;
 
@@ -31,12 +31,17 @@ public class Boid : MonoBehaviour
 
     public float alignmentFactor = 0.05f;
 
-    // public float turningFactor = 0.2f;
+    public float horizontalRadius = 20f; // radius of the circle
+    [Range(0f, 50f)]
 
-    // public float leftMargin;
-    // public float rightMargin;
-    // public float downMargin;
-    // public float upMargin;
+    public float verticalRadius = 10f;
+    [Range(0f, 10f)]
+
+    private float angle = 0f; // current angle
+
+    private float RotateSpeed = 0.5f;
+    static Boid centerBoid;
+
     List<Boid> neighbors;
 
     List<Transform> obstacles;
@@ -52,16 +57,15 @@ public class Boid : MonoBehaviour
 
     public List<Boid> Neighbors { get => neighbors; set => neighbors = value; }
     public List<Transform> Obstacles { get => obstacles; set => obstacles = value; }
+    public static Boid CenterBoid { get => centerBoid; set => centerBoid = value; }
+
+    // public static Vector2 Center { get => center; set => center = value; }
 
     // Start is called before the first frame update
 
     void Start()
     {
         boidCollider = GetComponent<Collider2D>();
-        // leftMargin = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, 0)).x;
-        // rightMargin = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, 0)).x;
-        // downMargin = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, 0)).y;
-        // upMargin = Camera.main.ViewportToWorldPoint(new Vector3(0, 1, 0)).y;
     }
 
 
@@ -89,19 +93,27 @@ public class Boid : MonoBehaviour
         + AvoidObstacles();
     }
 
+    // public Vector2 Circle()
+    // {
+    //     angle += RotateSpeed * Time.deltaTime; // increase angle over time
+    //     float x = horizontalRadius * Mathf.Cos(angle); // calculate X coordinate
+    //     float y = verticalRadius * Mathf.Sin(angle); // calculate Y coordinate
+    //     Vector2 vec = new Vector2(x, y);
+    //     return vec;
+    // }
+
     public Vector2 MoveWithinRadius()
     {
-        Vector2 center = Vector2.zero;
-        // throw new System.NotImplementedException();
-        Vector2 centerOffset = center - (Vector2)transform.position;
-        float t = centerOffset.magnitude / radius;
+        Vector2 centerVec = Vector2.zero;
+        Vector2 displacement = centerVec - (Vector2)transform.position;
+        float distance = displacement.magnitude;
 
-        if (t < 0.9)
+        if (distance < radius)
         {
             return Vector2.zero;
 
         }
-        return centerOffset * t * t;
+        return displacement * turnFactor;
     }
 
     Vector2 AvoidObstacles()
@@ -118,7 +130,7 @@ public class Boid : MonoBehaviour
             }
         }
 
-        return avd;
+        return avd * turnFactor;
     }
 
     Vector2 Avoidance()
@@ -140,7 +152,7 @@ public class Boid : MonoBehaviour
 
     Vector2 Alignment()
     {
-        Vector2 sum_velocity = Vector2.zero;
+        Vector2 sum_velocity = centerBoid.transform.up;
 
         if (neighbors == null || neighbors.Count == 0)
             return transform.up;
@@ -159,7 +171,7 @@ public class Boid : MonoBehaviour
     Vector2 Cohesion()
     {
 
-        Vector2 relative_center_sum = Vector2.zero;
+        Vector2 relative_center_sum = centerBoid.transform.position;
 
         if (neighbors == null || neighbors.Count == 0)
 
