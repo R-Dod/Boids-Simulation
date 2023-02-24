@@ -75,6 +75,7 @@ public class Boid : MonoBehaviour
 
     private Vector2 calculateVelocity()
     {
+        //calculate total velocity based on rules
         return
         Avoidance()
         + Alignment()
