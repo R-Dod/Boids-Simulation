@@ -5,16 +5,13 @@ using UnityEngine;
 public class Flock : MonoBehaviour
 {
     public Boid myPrefab;
-    // public MainBoid mainPrefab;
-    // Boid centerBoid;
     public GameObject myObstable;
-    // MainBoid mainBoid;
     List<Boid> boids = new List<Boid>();
 
     [Range(1, 500)]
-    public int boidNum = 2;
-    [Range(1f, 10f)]
-    public float neighborRadius = 10f;
+    public int boidNumber = 2;
+    // [Range(1f, 10f)]
+    // public float neighborRadius = 10f;
     [Range(1f, 100f)]
     public float visibleRange = 5f;
     int i = 0;
@@ -34,31 +31,27 @@ public class Flock : MonoBehaviour
     void Start()
     {
 
-        // for (int i = 0; i < boidNum; i++)
-        // {
-            Boid newBoid = Instantiate(
-             myPrefab,
-             Random.insideUnitCircle * boidNum,
-             Quaternion.Euler(0, 0, Random.Range(0f, 360f)),
-             transform
-            );
+        // create center boid
+        Boid newBoid = Instantiate(
+         myPrefab,
+         Random.insideUnitCircle * boidNumber,
+         Quaternion.Euler(0, 0, Random.Range(0f, 360f)),
+         transform
+        );
 
-            newBoid.name = "Boid " + i;
-            boids.Add(newBoid);
+        newBoid.name = "Boid " + i;
+        boids.Add(newBoid);
 
-            // centerBoid = newBoid;
-        // }
 
     }
 
     private void FixedUpdate()
     {
         if (Input.GetMouseButtonDown(0))
-        {
+        { // on left click, generate boids
             Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Boid newBoid = Instantiate(
                myPrefab,
-            //    Random.insideUnitCircle * boidNum,
             new Vector2(pos.x, pos.y),
                Quaternion.Euler(0, 0, Random.Range(0f, 360f)),
                transform
@@ -70,11 +63,11 @@ public class Flock : MonoBehaviour
         }
 
         if (Input.GetMouseButtonDown(1))
-        {
+        { // on right click, generate obstacles
             Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Instantiate(
               myObstable,
-            //    Random.insideUnitCircle * boidNum,
+            //    Random.insideUnitCircle * boidNumber,
             new Vector2(pos.x, pos.y),
                Quaternion.Euler(0, 0, Random.Range(0f, 360f)),
                transform
@@ -93,19 +86,13 @@ public class Flock : MonoBehaviour
             List<Boid> neighbors = getNeighbors(item);
             item.Neighbors = neighbors;
             item.Obstacles = getObstacles(item);
-            // print(item.Neighbors.Count);
-            // item.gameObject.GetComponent<SpriteRenderer>().color = Color.Lerp(Color.white, Color.red, item.Neighbors.Count / 6f);
-
             item.Move();
         }
     }
 
     Boid getFlockCenter()
     {
-        // Debug.Log(boids.Count);
-        boids[0].gameObject.GetComponent<SpriteRenderer>().color = Color.green;
         return boids[0];
-
     }
 
     List<Boid> getNeighbors(Boid boid)

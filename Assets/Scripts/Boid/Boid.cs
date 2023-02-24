@@ -11,8 +11,8 @@ public class Boid : MonoBehaviour
 
     // Vector2 position;
     public Vector2 velocity;
-    public float radius = 15f;
-
+    float majorAxis = 20;
+    float minorAxis = 10;
     [Range(0f, 100f)]
 
     public float protected_range = 2.5f;
@@ -31,15 +31,6 @@ public class Boid : MonoBehaviour
 
     public float alignmentFactor = 0.05f;
 
-    public float horizontalRadius = 20f; // radius of the circle
-    [Range(0f, 50f)]
-
-    public float verticalRadius = 10f;
-    [Range(0f, 10f)]
-
-    private float angle = 0f; // current angle
-
-    private float RotateSpeed = 0.5f;
     static Boid centerBoid;
 
     List<Boid> neighbors;
@@ -59,7 +50,6 @@ public class Boid : MonoBehaviour
     public List<Transform> Obstacles { get => obstacles; set => obstacles = value; }
     public static Boid CenterBoid { get => centerBoid; set => centerBoid = value; }
 
-    // public static Vector2 Center { get => center; set => center = value; }
 
     // Start is called before the first frame update
 
@@ -80,7 +70,6 @@ public class Boid : MonoBehaviour
         transform.up = velocity;
         transform.position += (Vector3)velocity * Time.deltaTime;
 
-
     }
 
     private Vector2 calculateVelocity()
@@ -89,29 +78,25 @@ public class Boid : MonoBehaviour
         Avoidance()
         + Alignment()
         + Cohesion()
-        + MoveWithinRadius()
+        + MoveWithinScreenBounds()
         + AvoidObstacles();
     }
 
-    // public Vector2 Circle()
-    // {
-    //     angle += RotateSpeed * Time.deltaTime; // increase angle over time
-    //     float x = horizontalRadius * Mathf.Cos(angle); // calculate X coordinate
-    //     float y = verticalRadius * Mathf.Sin(angle); // calculate Y coordinate
-    //     Vector2 vec = new Vector2(x, y);
-    //     return vec;
-    // }
-
-    public Vector2 MoveWithinRadius()
+    public Vector2 MoveWithinScreenBounds()
     {
-        Vector2 centerVec = Vector2.zero;
-        Vector2 displacement = centerVec - (Vector2)transform.position;
-        float distance = displacement.magnitude;
+        Vector2 center = Vector2.zero;
 
-        if (distance < radius)
+        Vector2 position = transform.position;
+
+        Vector2 displacement = center - position;
+
+        float x = position.x - center.x;
+        float y = position.y - center.y;
+        float result = (x * x) / (majorAxis * majorAxis) + (y * y) / (minorAxis * minorAxis);
+
+        if (result <= 1)
         {
             return Vector2.zero;
-
         }
         return displacement * turnFactor;
     }
@@ -124,7 +109,7 @@ public class Boid : MonoBehaviour
         {
             float distance = Vector2.Distance(transform.position, item.position);
 
-            if ((distance * distance) < (protected_range * protected_range))
+            if ((Math.Abs(distance) < protected_range))
             {
                 avd += (Vector2)(transform.position - item.position);
             }
