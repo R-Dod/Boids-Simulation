@@ -11,8 +11,8 @@ public class Boid : MonoBehaviour
 
     // Vector2 position;
     public Vector2 velocity;
-    float majorAxis = 20;
-    float minorAxis = 10;
+    float majorAxis = 15f;
+    float minorAxis = 10f;
     [Range(0f, 100f)]
 
     public float protected_range = 2.5f;
@@ -31,8 +31,6 @@ public class Boid : MonoBehaviour
 
     public float alignmentFactor = 0.05f;
 
-    static Boid centerBoid;
-
     List<Boid> neighbors;
 
     List<Transform> obstacles;
@@ -48,7 +46,6 @@ public class Boid : MonoBehaviour
 
     public List<Boid> Neighbors { get => neighbors; set => neighbors = value; }
     public List<Transform> Obstacles { get => obstacles; set => obstacles = value; }
-    public static Boid CenterBoid { get => centerBoid; set => centerBoid = value; }
 
 
     // Start is called before the first frame update
@@ -89,6 +86,7 @@ public class Boid : MonoBehaviour
         Vector2 position = transform.position;
 
         Vector2 displacement = center - position;
+        float distance = displacement.magnitude;
 
         float x = position.x - center.x;
         float y = position.y - center.y;
@@ -98,6 +96,7 @@ public class Boid : MonoBehaviour
         {
             return Vector2.zero;
         }
+        
         return displacement * turnFactor;
     }
 
@@ -137,7 +136,7 @@ public class Boid : MonoBehaviour
 
     Vector2 Alignment()
     {
-        Vector2 sum_velocity = centerBoid.transform.up;
+        Vector2 sum_velocity = Vector2.zero;
 
         if (neighbors == null || neighbors.Count == 0)
             return transform.up;
@@ -156,7 +155,7 @@ public class Boid : MonoBehaviour
     Vector2 Cohesion()
     {
 
-        Vector2 relative_center_sum = centerBoid.transform.position;
+        Vector2 relative_center_sum = Vector2.zero;
 
         if (neighbors == null || neighbors.Count == 0)
 

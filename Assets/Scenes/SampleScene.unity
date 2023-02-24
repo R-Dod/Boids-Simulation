@@ -3237,9 +3237,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d14b1810e5c861b46b4801da9244eae6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myPrefab: {fileID: 6494279824841316388, guid: b1eb192e865e42f4091edc3dd6a32ebc, type: 3}
+  myPrefab: {fileID: 1187054172498828536, guid: b1eb192e865e42f4091edc3dd6a32ebc, type: 3}
   myObstable: {fileID: 3865694990540776027, guid: 7eca12e97da44e14dab049f1b54c4846, type: 3}
-  boidNumber: 54
+  boidNumber: 2
   visibleRange: 5
 --- !u!4 &1283322822
 Transform:

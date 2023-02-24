@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1089331952593036069}
   - component: {fileID: 1089331952593036068}
   - component: {fileID: 1313764094868337533}
-  - component: {fileID: 6494279824841316388}
+  - component: {fileID: 1187054172498828536}
   m_Layer: 0
   m_Name: Boid
   m_TagString: Untagged
@@ -100,7 +100,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6494279824841316388
+--- !u!114 &1187054172498828536
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -114,7 +114,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   velocity: {x: 0, y: 0}
   protected_range: 2.5
-  turnFactor: 2.5
+  turnFactor: 0.25
   speed: 5
   cohesionFactor: 0.005
   avoidanceFactor: 0.05

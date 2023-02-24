@@ -16,17 +16,6 @@ public class Flock : MonoBehaviour
     public float visibleRange = 5f;
     int i = 0;
 
-    // private void Awake()
-    // {
-    //     mainBoid = Instantiate(
-    //     mainPrefab,
-    //     new Vector2(0, -7),
-    //     Quaternion.Euler(0, 0, 0),
-    //     transform
-    // );
-    //     mainBoid.name = "Main Boid";
-    // }
-
     // Start is called before the first frame update
     void Start()
     {
@@ -84,7 +73,6 @@ public class Flock : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Boid.CenterBoid = getFlockCenter();
 
         foreach (Boid item in boids)
         {
@@ -95,10 +83,6 @@ public class Flock : MonoBehaviour
         }
     }
 
-    Boid getFlockCenter()
-    {
-        return boids[0];
-    }
 
     List<Boid> getNeighbors(Boid boid)
     {
