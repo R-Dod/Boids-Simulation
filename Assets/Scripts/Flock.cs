@@ -34,7 +34,7 @@ public class Flock : MonoBehaviour
         // create center boid
         Boid newBoid = Instantiate(
          myPrefab,
-         Random.insideUnitCircle * boidNumber,
+         Random.insideUnitCircle * 10,
          Quaternion.Euler(0, 0, Random.Range(0f, 360f)),
          transform
         );
