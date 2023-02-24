@@ -74,6 +74,11 @@ public class Flock : MonoBehaviour
               );
         }
 
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+
     }
 
     // Update is called once per frame
