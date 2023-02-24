@@ -10,8 +10,7 @@ public class Flock : MonoBehaviour
 
     [Range(1, 500)]
     public int boidNumber = 2;
-    // [Range(1f, 10f)]
-    // public float neighborRadius = 10f;
+
     [Range(1f, 100f)]
     public float visibleRange = 5f;
     int i = 0;
@@ -56,7 +55,6 @@ public class Flock : MonoBehaviour
             Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Instantiate(
               myObstable,
-            //    Random.insideUnitCircle * boidNumber,
             new Vector2(pos.x, pos.y),
                Quaternion.Euler(0, 0, Random.Range(0f, 360f)),
                transform
@@ -75,7 +73,7 @@ public class Flock : MonoBehaviour
     {
 
         foreach (Boid item in boids)
-        {
+        { // simulate flocking movement
             List<Boid> neighbors = getNeighbors(item);
             item.Neighbors = neighbors;
             item.Obstacles = getObstacles(item);
@@ -85,7 +83,7 @@ public class Flock : MonoBehaviour
 
 
     List<Boid> getNeighbors(Boid boid)
-    {
+    { //get all neighbors within the boid visible range
         List<Boid> neighbors = new List<Boid>();
         Collider2D[] contextColliders = Physics2D.OverlapCircleAll(boid.transform.position, visibleRange);
 
@@ -102,7 +100,7 @@ public class Flock : MonoBehaviour
     }
 
     List<Transform> getObstacles(Boid boid)
-    {
+    { // get all obstables within the boid visible range
         List<Transform> obstacles = new List<Transform>();
         Collider2D[] collection = Physics2D.OverlapCircleAll(boid.transform.position, visibleRange);
 

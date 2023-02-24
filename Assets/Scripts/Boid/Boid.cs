@@ -59,12 +59,16 @@ public class Boid : MonoBehaviour
     public void Move()
     {
         velocity += calculateVelocity();
+
+        //limit boid speed
         if (velocity.sqrMagnitude > (speed * speed))
         {
             velocity = velocity.normalized * speed;
         }
-        // velocity *=driveFactor;
+        //point in direction of movement
         transform.up = velocity;
+
+        //move boid. Time.delta smoothens the movement
         transform.position += (Vector3)velocity * Time.deltaTime;
 
     }
@@ -81,6 +85,7 @@ public class Boid : MonoBehaviour
 
     public Vector2 MoveWithinScreenBounds()
     {
+        // limit movement within screenbounds in an oval
         Vector2 center = Vector2.zero;
 
         Vector2 position = transform.position;
@@ -96,12 +101,13 @@ public class Boid : MonoBehaviour
         {
             return Vector2.zero;
         }
-        
+
         return displacement * turnFactor;
     }
 
     Vector2 AvoidObstacles()
     {
+        // use avoidance login for obstacles
         Vector2 avd = Vector2.zero;
 
         foreach (Transform item in obstacles)
@@ -119,11 +125,14 @@ public class Boid : MonoBehaviour
 
     Vector2 Avoidance()
     {
+
         Vector2 avd = Vector2.zero;
 
         foreach (Boid item in neighbors)
         {
             float distance = Vector2.Distance(transform.position, item.transform.position);
+
+            // get average displacement vector between boid and neighbors if within its protected range
 
             if ((distance * distance) < (protected_range * protected_range))
             {
@@ -136,6 +145,7 @@ public class Boid : MonoBehaviour
 
     Vector2 Alignment()
     {
+        // get average direction in which neighbors are pointing
         Vector2 sum_velocity = Vector2.zero;
 
         if (neighbors == null || neighbors.Count == 0)
@@ -154,6 +164,7 @@ public class Boid : MonoBehaviour
 
     Vector2 Cohesion()
     {
+        //get velocity from center relative to its neighbors
 
         Vector2 relative_center_sum = Vector2.zero;
 
